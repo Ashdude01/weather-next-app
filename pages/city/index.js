@@ -411,7 +411,7 @@ const Slug = () => {
                                               {Math.floor(item.main.temp_max)}°c
                                             </span>{" "}
                                             <span className="text-primary">
-                                              {item.main.temp_min}°c
+                                              {Math.floor(item.main.temp_min)}°c
                                             </span>
                                           </p>
                                         </div>
