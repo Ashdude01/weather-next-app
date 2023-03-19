@@ -1,0 +1,191 @@
+.container {
+  min-height: 100vh;
+}
+.searchBar {
+  padding: 15px 20px;
+  border-radius: 50px;
+  /* box-shadow: 5px 5px 10px rgba(41, 40, 40, 0.74); */
+  -webkit-box-shadow: 14px 22px 40px -19px rgba(56, 56, 56, 0.81);
+  -moz-box-shadow: 14px 22px 40px -19px rgba(56, 56, 56, 0.81);
+  box-shadow: 14px 22px 40px -19px rgba(56, 56, 56, 0.81);
+  background-color: #7b1fa2;
+}
+.input-group-text {
+  border: none;
+  border-radius: 40px;
+}
+.searchBar input {
+  font-size: 25px;
+  width: 95%;
+  display: inline-block;
+  margin: auto;
+  outline: none;
+  border-radius: 40px;
+  border: none;
+}
+.top{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+}
+.nameRight > i{
+  font-size: 20px;
+margin: auto 5px;
+cursor: pointer;
+}
+.temp {
+  font-size: 50px;
+  margin-top: -20px;
+}
+.weatherDesc {
+  margin-top: -40px;
+}
+.weather {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.right {
+  border-radius: 40px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  /* background-color: white;
+  color: black; */
+}
+.tempd{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+
+/* widget box */
+.wDetails {
+  /* width: 100vw; */
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  /* overflow-y: hidden;
+  overflow-x: scroll; */
+}
+
+.wbox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 1rem;
+  justify-content: flex-start;
+}
+.wbox > i {
+  font-size: 1.5rem;
+  background-color: #7b1fa2;
+  padding: 0.5rem;
+  border-radius: 10px;
+  margin-right: 0.5rem;
+  color: white;
+}
+.bright {
+  display: flex;
+  flex-direction: column;
+}
+.bright > span {
+  font-size: 12px !important;
+}
+
+/* sunrise & sunset */
+.sun{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  background-color: rgba(255, 150, 169, 0.342);
+  width: 454px;
+  border-radius: 20px;
+}
+.sunbox > i{
+  font-size: 2rem;
+  background-color: #ffffff;
+  padding: 0.5rem;
+  border-radius: 10px;
+  margin-right: 0.5rem;
+}
+.sunbox{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 1rem;
+  justify-content: flex-start;
+
+}
+
+/* today forecast */
+.mainDiv{
+  display: flex;
+  flex-wrap: wrap;
+}
+.centerDiv{
+width: 100% !important;
+overflow-y: hidden;
+overflow-x: scroll;
+display: flex;
+padding: 1rem;
+flex-direction: row;
+}
+.centerDiv::-webkit-scrollbar{
+  overflow: hidden;
+}
+.mycarousel-item{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  width: 300px;
+  border-radius: 30px;
+  margin-right: 20px;
+}
+.mycarousel-item > i{
+  font-size: 4rem;
+}
+.mycarousel-item > p{
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 8px auto;
+}
+
+@media screen and (max-width: 1000px) {
+  .tableDiv{
+    width: 100vw;
+    }
+    .tablebox{
+      width: 100% !important;
+      overflow-y: hidden;
+      overflow-x: scroll;
+    }
+    .tablebox::-webkit-scrollbar{
+      overflow: hidden;
+    }
+}
+@media screen and (max-width: 480px) {
+  .weather{flex-wrap: wrap;}
+  .right{width: 80%; margin: auto;}
+  .wDetails {
+    width: 100vw;
+    display: grid;
+    overflow-y: hidden;
+    overflow-x: scroll;
+  }
+  .sun{margin-top: 50px; width: 100%;}
+  .tableDiv{
+    width: 100vw;
+    }
+    .tablebox{
+      width: 100% !important;
+      overflow-y: hidden;
+      overflow-x: scroll;
+    }
+    .tablebox::-webkit-scrollbar{
+      overflow: hidden;
+    }
+}
+
