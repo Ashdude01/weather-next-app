@@ -8,7 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 export default function Home() {
   const [city, setCity] = useState(null);
   const [cityData, setCityData] = useState(null);
-  const [error, setError] = useState();
+  // const [error, setError] = useState(null);
 
   const searchCity = (e) => {
     e.preventDefault();
@@ -21,19 +21,20 @@ export default function Home() {
       })
       .catch(function (error) {
         // handle error
-        setError(error);
+        // setError(error);
+        toast.error(error.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          });
       });
     };
-    error && toast.error(error.message, {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-      });
+    
 
   return (
     <>
@@ -48,12 +49,12 @@ export default function Home() {
       <main className="container">
         
         <div className="text-center">
-          <h1 className="my-5">Search City</h1>
+          <h1 className="my-5 fw-bold">Search City</h1>
           <form onSubmit={searchCity} className="input-group searchBar bg-success-subtle mb-3">
             <input
               onChange={(e) => setCity(e.target.value)}
               type="search"
-              placeholder="Search city" className="bg-success-subtle"
+              placeholder="Search city" className="bg-success-subtle fs-4"
             />
             <span className="input-group-text p-0 bg-success-subtle" id="basic-addon2">
               <i onClick={searchCity} className="bi bi-search"></i>

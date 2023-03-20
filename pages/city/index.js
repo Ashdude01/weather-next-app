@@ -24,7 +24,7 @@ const Slug = () => {
         });
     // setData(json);
     console.log(data);
-  }, [lat, lon]);
+  }, [0]);
 
   const searchCity = () => {
     router.push("/");
@@ -171,7 +171,7 @@ const Slug = () => {
                     style={{ width: "fit-content" }}
                     className="badge rounded-pill bg-primary"
                   >
-                    {new Date(data.list[0].dt * 1000).toLocaleTimeString(
+                    <i class="bi bi-arrow-clockwise"></i> {new Date(data.list[0].dt * 1000).toLocaleTimeString(
                       "en-IN",
                       { hour: "numeric", minute: "numeric", hour12: true }
                     )}

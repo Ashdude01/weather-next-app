@@ -1,6 +1,7 @@
 .container {
   min-height: 100vh;
 }
+
 .searchBar {
   padding: 15px 20px;
   border-radius: 50px;
@@ -8,7 +9,6 @@
   -webkit-box-shadow: 14px 22px 40px -19px rgba(56, 56, 56, 0.81);
   -moz-box-shadow: 14px 22px 40px -19px rgba(56, 56, 56, 0.81);
   box-shadow: 14px 22px 40px -19px rgba(56, 56, 56, 0.81);
-  background-color: #7b1fa2;
 }
 .input-group-text {
   border: none;
