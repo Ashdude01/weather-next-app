@@ -12,7 +12,7 @@ export default function Home() {
 
   const searchCity = (e) => {
     e.preventDefault();
-    let getCityUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=${process.env.NEXT_PUBLIC_API_KEY}`;
+    let getCityUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=${process.env.NEXT_PUBLIC_API_KEY}`;
     axios
       .get(getCityUrl)
       .then(function (response) {

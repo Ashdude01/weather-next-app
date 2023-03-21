@@ -1,7 +1,3 @@
-.container {
-  min-height: 100vh;
-}
-
 .searchBar {
   padding: 15px 20px;
   border-radius: 50px;
@@ -16,9 +12,8 @@
 }
 .searchBar input {
   font-size: 25px;
-  width: 95%;
   display: inline-block;
-  margin: auto;
+  margin-right: auto;
   outline: none;
   border-radius: 40px;
   border: none;
@@ -31,7 +26,7 @@
   align-items: center;
 }
 .nameRight > i{
-  font-size: 20px;
+font-size: 20px;
 margin: auto 5px;
 cursor: pointer;
 }
@@ -126,8 +121,6 @@ cursor: pointer;
 }
 .centerDiv{
 width: 100% !important;
-overflow-y: hidden;
-overflow-x: scroll;
 display: flex;
 padding: 1rem;
 flex-direction: row;
@@ -153,7 +146,22 @@ flex-direction: row;
   margin: 8px auto;
 }
 
-@media screen and (max-width: 1000px) {
+
+@media screen and (max-width: 480px) {
+  .weather{flex-wrap: wrap;}
+  .right{width: 90%; margin: auto;}
+  .wDetails {
+    width: 100vw;
+    display: grid;
+    overflow-y: hidden;
+    overflow-x: scroll;
+  }
+  .sun{margin-top: 50px; width: 100%;}
+  .centerDiv{
+    overflow-y: hidden;
+    overflow-x: scroll;
+  }
+  .mycarousel-item{padding:2rem !important}
   .tableDiv{
     width: 100vw;
     }
@@ -166,16 +174,7 @@ flex-direction: row;
       overflow: hidden;
     }
 }
-@media screen and (max-width: 480px) {
-  .weather{flex-wrap: wrap;}
-  .right{width: 80%; margin: auto;}
-  .wDetails {
-    width: 100vw;
-    display: grid;
-    overflow-y: hidden;
-    overflow-x: scroll;
-  }
-  .sun{margin-top: 50px; width: 100%;}
+@media screen and (max-width: 1000px) {
   .tableDiv{
     width: 100vw;
     }
@@ -187,5 +186,12 @@ flex-direction: row;
     .tablebox::-webkit-scrollbar{
       overflow: hidden;
     }
+    .container{
+    overflow: hidden;
+    max-width: 100% !important;
+    }
+}
+.container{
+  min-height: 100vh !important;
 }
 

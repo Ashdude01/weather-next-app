@@ -1,34 +1,27 @@
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import Head from "next/head";
-import axios from "axios";
+import axios, { Axios } from "axios";
 import Link from "next/link";
 
-const Slug = () => {
+const City = ({lat,lon}) => {
   const router = useRouter();
-  const { lat, lon } = router.query;
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
-  let url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&cnt=5&appid=${process.env.NEXT_PUBLIC_API_KEY}`;
-
+  // const {lat, lon} = router.query;
   useEffect(() => {
-      axios
-        .get(url)
-        .then(function (response) {
-          // handle success
-          setData(response.data);
-        })
-        .catch(function (error) {
-          // handle error
-          setError(error);
-        });
-    // setData(json);
-    console.log(data);
-  }, [0]);
+    axios
+    .get(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&cnt=40&appid=${process.env.NEXT_PUBLIC_API_KEY}`)
+    .then(function (response) {
+      // handle success
+      setData(response.data);
+    })
+    .catch(function (error) {
+      // handle error
+      setError(error);
+    });
+      },[lat, lon]);
 
-  const searchCity = () => {
-    router.push("/");
-  };
 
   return (
     <>
@@ -85,10 +78,10 @@ const Slug = () => {
                         </p>
                       </div>
                       <div className="nameRight pe-4">
-                        {/* <i
+                        <i
                         onClick={() => router.push("/")}
-                        className="bi bi-search fw-bold bg-primary"
-                      ></i> */}
+                        className="bi bi-search fw-bold text-primary"
+                      ></i>
                         {/* <i
                         onClick={() =>
                           addFavourate(
@@ -171,14 +164,14 @@ const Slug = () => {
                     style={{ width: "fit-content" }}
                     className="badge rounded-pill bg-primary"
                   >
-                    <i class="bi bi-arrow-clockwise"></i> {new Date(data.list[0].dt * 1000).toLocaleTimeString(
+                    <i className="bi bi-arrow-clockwise"></i> {new Date(data.list[0].dt * 1000).toLocaleTimeString(
                       "en-IN",
                       { hour: "numeric", minute: "numeric", hour12: true }
                     )}
                   </span>
-                  {data.list[0].weather.map((climate) => {
+                  {data.list[0].weather.map((climate, index) => {
                     return (
-                      <>
+                      <div key={index}>
                         <img
                           src={
                             "https://openweathermap.org/img/wn/" +
@@ -190,7 +183,7 @@ const Slug = () => {
                         <p className="weatherDesc fw-bold">
                           {climate.main}, <span>{climate.description}</span>
                         </p>
-                      </>
+                      </div>
                     );
                   })}
 
@@ -278,7 +271,7 @@ const Slug = () => {
                       aria-controls="pills-contact"
                       aria-selected="false"
                     >
-                      Next 3-Hours
+                      Next 5 Days / 3-Hours
                     </button>
                   </li>
                 </ul>
@@ -491,5 +484,11 @@ const Slug = () => {
     </>
   );
 };
-
-export default Slug;
+export async function getServerSideProps(context) {
+  const lat = context.query.lat;
+  const lon = context.query.lon;
+  return {
+    props: {lat,lon}, // will be passed to the page component as props
+  }
+}
+export default City;
