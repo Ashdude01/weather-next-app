@@ -148,6 +148,7 @@ flex-direction: row;
 
 
 @media screen and (max-width: 480px) {
+  .input-group{flex-wrap: nowrap !important;}
   .weather{flex-wrap: wrap;}
   .right{width: 90%; margin: auto;}
   .wDetails {
