@@ -54,7 +54,7 @@ export default function Home() {
             <input
               onChange={(e) => setCity(e.target.value)}
               type="search"
-              placeholder="Search city" className="bg-success-subtle fs-4"
+              placeholder="Search city" className="bg-success-subtle fs-5"
             />
             <span className="input-group-text p-0 bg-success-subtle" id="basic-addon2">
               <i onClick={searchCity} className="bi bi-search"></i>

@@ -6,12 +6,13 @@
   -moz-box-shadow: 14px 22px 40px -19px rgba(56, 56, 56, 0.81);
   box-shadow: 14px 22px 40px -19px rgba(56, 56, 56, 0.81);
 }
+
 .input-group-text {
   border: none;
   border-radius: 40px;
 }
 .searchBar input {
-  font-size: 25px;
+  max-width: 92%;
   display: inline-block;
   margin-right: auto;
   outline: none;
