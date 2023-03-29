@@ -1,27 +1,50 @@
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import Head from "next/head";
-import axios, { Axios } from "axios";
+import axios from "axios";
 import Link from "next/link";
+import { db } from "../firebase";
+import {doc, setDoc, getDoc } from "firebase/firestore";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const City = ({lat,lon}) => {
+const City = ({ lat, lon, ip, weather, favourite}) => {
   const router = useRouter();
-  const [data, setData] = useState(null);
+  const [data, setData] = useState(weather);
   const [error, setError] = useState(null);
-  // const {lat, lon} = router.query;
-  useEffect(() => {
-    axios
-    .get(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&cnt=40&appid=${process.env.NEXT_PUBLIC_API_KEY}`)
-    .then(function (response) {
-      // handle success
-      setData(response.data);
-    })
-    .catch(function (error) {
-      // handle error
-      setError(error);
-    });
-      },[lat, lon]);
+  const [favlist, setFavlist] = useState(favourite);
+  const [fill, setfill] = useState(' ')
 
+  // useEffect(() => {
+  //   axios
+  //     .get(
+  //       `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&cnt=40&appid=${process.env.NEXT_PUBLIC_API_KEY}`
+  //     )
+  //     .then(async function (response) {
+  //       setData(response.data);
+  //       // fetch from database favourites
+  //       const docSnap = await getDoc(
+  //         doc(db, "user", `${ip}`, "favourite", `${response.data.city.id}`)
+  //       );
+  //       if(docSnap.exists()){
+  //         setFavlist(true);
+  //       }
+  //     })
+  //     .catch(function (error) {
+  //       // handle error
+  //       setError(error);
+  //     });
+  // }, [lat, lon]);
+
+
+  const setFav = async (id, city_name, city_lat, city_lon, country) => {
+    if(!favlist){
+    setfill('-fill ');
+    await setDoc(
+      doc(db, "user", `${ip}`, "favourite",`${id}`), {id,city_name,city_lat,city_lon,country}
+    ).then(()=>{toast.success('Added to Favourites');setFavlist(true)}).catch((error)=>{setfill(' ');toast.error(error.message)})
+    }
+  };
 
   return (
     <>
@@ -37,17 +60,17 @@ const City = ({lat,lon}) => {
         <div className="container">
           {error && error != null && (
             <div className="error py-5">
-            <div className="alert alert-danger" role="alert">
-              <h4 className="alert-heading">Error Occured!</h4>
-              <p>{error.message}</p>
-              <hr />
-              <p className="mb-0">
-                Contact us via{" "}
-                <Link className="text-decoration-none" href="/contact">
-                  this link
-                </Link>
-              </p>
-            </div>
+              <div className="alert alert-danger" role="alert">
+                <h4 className="alert-heading">Error Occured!</h4>
+                <p>{error.message}</p>
+                <hr />
+                <p className="mb-0">
+                  Contact us via{" "}
+                  <Link className="text-decoration-none" href="/contact">
+                    this link
+                  </Link>
+                </p>
+              </div>
             </div>
           )}
           {data && data != null && data != undefined && (
@@ -79,20 +102,24 @@ const City = ({lat,lon}) => {
                       </div>
                       <div className="nameRight pe-4">
                         <i
-                        onClick={() => router.push("/")}
-                        className="bi bi-search fw-bold text-primary"
-                      ></i>
-                        {/* <i
+                          onClick={() => router.push("/")}
+                          className="bi bi-search fw-bold text-primary"
+                        ></i>
+                        {favlist? <i
+                        className={"bi bi-heart-fill fw-bold text-danger"}
+                      ></i> : 
+                      <i
                         onClick={() =>
-                          addFavourate(
+                          setFav(
                             data.city.id,
                             data.city.name,
                             data.city.coord.lat,
-                            data.city.coord.lon
+                            data.city.coord.lon,
+                            data.city.country
                           )
                         }
-                        className={"bi bi-heart" + fill + "fw-bold text-danger"}
-                      ></i> */}
+                        className={"bi bi-heart"+fill+"text-danger pulse"}
+                      ></i> }
                       </div>
                     </div>
                     <div className="wDetails my-5">
@@ -131,7 +158,7 @@ const City = ({lat,lon}) => {
                         <div className="bright">
                           <span>Visibility</span>
                           <p className="value my-0 fw-bold fs-4">
-                            {data.list[0].visibility/1000}
+                            {data.list[0].visibility / 1000}
                             <span className="fs-6">km</span>
                           </p>
                         </div>
@@ -164,7 +191,8 @@ const City = ({lat,lon}) => {
                     style={{ width: "fit-content" }}
                     className="badge rounded-pill bg-primary"
                   >
-                    <i className="bi bi-arrow-clockwise"></i> {new Date(data.list[0].dt * 1000).toLocaleTimeString(
+                    <i className="bi bi-arrow-clockwise"></i>{" "}
+                    {new Date(data.list[0].dt * 1000).toLocaleTimeString(
                       "en-IN",
                       { hour: "numeric", minute: "numeric", hour12: true }
                     )}
@@ -211,13 +239,14 @@ const City = ({lat,lon}) => {
                     <div className="bright">
                       <span>Sunrise</span>
                       <p className="value fw-bold fs-4">
-                        {new Date(
-                          data.city.sunrise * 1000
-                        ).toLocaleTimeString("en-IN", {
-                          hour: "numeric",
-                          minute: "numeric",
-                          hour12: true,
-                        })}
+                        {new Date(data.city.sunrise * 1000).toLocaleTimeString(
+                          "en-IN",
+                          {
+                            hour: "numeric",
+                            minute: "numeric",
+                            hour12: true,
+                          }
+                        )}
                       </p>
                     </div>
                   </div>
@@ -226,13 +255,14 @@ const City = ({lat,lon}) => {
                     <div className="bright">
                       <span>Sunset</span>
                       <p className="value my-0 fw-bold fs-4">
-                        {new Date(
-                          data.city.sunset * 1000
-                        ).toLocaleTimeString("en-IN", {
-                          hour: "numeric",
-                          minute: "numeric",
-                          hour12: true,
-                        })}
+                        {new Date(data.city.sunset * 1000).toLocaleTimeString(
+                          "en-IN",
+                          {
+                            hour: "numeric",
+                            minute: "numeric",
+                            hour12: true,
+                          }
+                        )}
                       </p>
                     </div>
                   </div>
@@ -293,7 +323,7 @@ const City = ({lat,lon}) => {
                           >
                             Morning
                           </span>
-                          <p>{Math.floor(data.list[0].main.temp)-6}°c</p>
+                          <p>{Math.floor(data.list[0].main.temp) - 6}°c</p>
                         </div>
                         <div className="mycarousel-item bg-success-subtle">
                           <i className="bi bi-brightness-high-fill text-warning"></i>
@@ -303,7 +333,7 @@ const City = ({lat,lon}) => {
                           >
                             Afternoon
                           </span>
-                          <p>{Math.floor(data.list[0].main.temp)+2}°c</p>
+                          <p>{Math.floor(data.list[0].main.temp) + 1}°c</p>
                         </div>
                         <div className="mycarousel-item bg-success-subtle">
                           <i className="bi bi-sunset-fill text-danger"></i>
@@ -313,7 +343,7 @@ const City = ({lat,lon}) => {
                           >
                             Evening
                           </span>
-                          <p>{Math.floor(data.list[0].main.temp)-3}°c</p>
+                          <p>{Math.floor(data.list[0].main.temp) - 3}°c</p>
                         </div>
                         <div className="mycarousel-item bg-success-subtle">
                           <i className="bi bi-moon-stars-fill"></i>
@@ -323,7 +353,7 @@ const City = ({lat,lon}) => {
                           >
                             Night
                           </span>
-                          <p>{Math.floor(data.list[0].main.temp)-8}°c</p>
+                          <p>{Math.floor(data.list[0].main.temp) - 5}°c</p>
                         </div>
                       </div>
                     </div>
@@ -347,16 +377,19 @@ const City = ({lat,lon}) => {
                                     <td>
                                       <div className="wbox">
                                         <div className="bright">
-                                          <span>{new Date(item.dt * 1000)
-                                              .toUTCString()
-                                              .slice(5, 11)}</span>
-                                          <p className="fw-bold">
+                                          <span>
                                             {new Date(item.dt * 1000)
-                                              .toLocaleTimeString("en-IN", {
-                                                hour: "numeric",
-                                                minute: "numeric",
-                                                hour12: true,
-                                              })}
+                                              .toUTCString()
+                                              .slice(5, 11)}
+                                          </span>
+                                          <p className="fw-bold">
+                                            {new Date(
+                                              item.dt * 1000
+                                            ).toLocaleTimeString("en-IN", {
+                                              hour: "numeric",
+                                              minute: "numeric",
+                                              hour12: true,
+                                            })}
                                           </p>
                                         </div>
                                       </div>
@@ -461,7 +494,7 @@ const City = ({lat,lon}) => {
                                         <div className="bright">
                                           <span>Visibility</span>
                                           <p className="value my-0 fw-bold fs-4">
-                                            {data.list[0].visibility/1000}
+                                            {data.list[0].visibility / 1000}
                                             <span className="fs-6">km</span>
                                           </p>
                                         </div>
@@ -480,6 +513,18 @@ const City = ({lat,lon}) => {
             </div>
           )}
         </div>
+        <ToastContainer
+        position="bottom-right"
+autoClose={1000}
+hideProgressBar={false}
+newestOnTop={false}
+closeOnClick
+rtl={false}
+pauseOnFocusLoss
+draggable
+pauseOnHover
+theme="dark"
+/>
       </main>
     </>
   );
@@ -487,8 +532,23 @@ const City = ({lat,lon}) => {
 export async function getServerSideProps(context) {
   const lat = context.query.lat;
   const lon = context.query.lon;
+  const res = await fetch("https://checkip.amazonaws.com/");
+  const ip2 = await res.text();
+  const ip = await JSON.parse(JSON.stringify(ip2));
+  let favourite = false;
+  const weather = await axios
+  .get(
+    `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&cnt=40&appid=${process.env.NEXT_PUBLIC_API_KEY}`
+  )
+  .then(response => response.data)
+  .catch(error => error);
+  const docSnap = await getDoc(
+    doc(db, "user", `${ip}`, "favourite", `${weather.city.id}`)
+  );
+  if(docSnap.exists()) favourite = true;
+
   return {
-    props: {lat,lon}, // will be passed to the page component as props
-  }
+    props: { lat, lon, ip, weather, favourite}, // will be passed to the page component as props
+  };
 }
 export default City;
